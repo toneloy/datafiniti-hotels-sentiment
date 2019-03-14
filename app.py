@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from keras.models import model_from_json
 import pickle
 
@@ -13,24 +13,22 @@ def predict_rating(text, model_, tokenizer_):
 
 
 def load_model():
-    with open('/floyd/home/datafiniti_hotel_reviews_sentiment.json', 'r') as json_file:
+    with open('datafiniti_hotel_reviews_sentiment.json', 'r') as json_file:
         loaded_model_json = json_file.read()
         loaded_model = model_from_json(loaded_model_json)
 
-    loaded_model.load_weights("/floyd/home/datafiniti_hotel_reviews_sentiment_weights.h5")
+    loaded_model.load_weights("datafiniti_hotel_reviews_sentiment_weights.h5")
     
-    with open('/floyd/home/datafiniti_hotel_reviews_sentiment_tokenizer.pickle', 'rb') as handle:
-        tokenizer = pickle.load(handle)
+    with open('datafiniti_hotel_reviews_sentiment_tokenizer.pickle', 'rb') as handle:
+        loaded_tokenizer = pickle.load(handle)
         
-    return loaded_model, tokenizer
+    return loaded_model, loaded_tokenizer
         
 
-# you can then reference this model object in evaluate function/handler
 model, tokenizer = load_model()
 
 
-# The request method is POST (this method enables your to send arbitrary data to the endpoint in the request body, including images, JSON, encoded-data, etc.)
-@app.route('/', methods=["GET"])
+@app.route('/evaluate', methods=["GET"])
 def evaluate():
     text = request.args.get('t')
     if text:
@@ -40,6 +38,11 @@ def evaluate():
         return jsonify({'text': text, 'rating': rating})
     
     return jsonify({'text': '', 'rating': 0})
+
+
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('home.html')
 
 
 # The following is for running command `python app.py` in local development, not required for serving on FloydHub.

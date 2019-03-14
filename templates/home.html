@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h2>Enter a review title to predict it's rating</h2>
+            <p>This is a fully connected neural network model that was trained using review for hotel stays (text) to predict a rating from 0 to 5, where 0 is bad and 5 is good.<p>
+            <p>Review titles are like short reviews or reviews summaries, e.g. 'Excellent stay' or 'I'll never come back'</p>
+            <p>Try a few short reviews like those to see if it can turn text into numbers correctly!</p>
+            <form action="">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="id_text", placeholder="Enter a review title here">
+                </div>
+                <button id="submit-button" class="btn btn-primary btn-block" type="button">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                    Get rating
+                </button>
+            </form>
+
+            <p id="rating-container" style="font-size: 120px" class="text-center"></p>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $('#submit-button').click(function() {
+            console.log('Getting rating');
+            $.get({
+                url: '/evaluate',
+                data: {t: $('#id_text').val()},
+                success: function(data) {
+                    var rating = parseFloat(data.rating);
+                    console.log(rating);
+                    $('#rating-container').html(Math.floor(rating * 100) / 100);
+                }
+            });
+        });
+    </script>
+{% endblock %}
