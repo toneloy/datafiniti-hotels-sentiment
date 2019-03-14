@@ -7,3 +7,5 @@
 
 data/
 data/*
+
+*.DS_Store
