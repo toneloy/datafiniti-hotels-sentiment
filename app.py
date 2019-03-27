@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template
-from keras.models import model_from_json
+from keras.models import load_model
 import pickle
 
 app = Flask(__name__)
@@ -13,11 +13,7 @@ def predict_rating(text, model_, tokenizer_):
 
 
 def load_model():
-    with open('datafiniti_hotel_reviews_sentiment.json', 'r') as json_file:
-        loaded_model_json = json_file.read()
-        loaded_model = model_from_json(loaded_model_json)
-
-    loaded_model.load_weights("datafiniti_hotel_reviews_sentiment_weights.h5")
+    loaded_model = load_model("datafiniti_hotel_reviews_sentiment.h5")
     
     with open('datafiniti_hotel_reviews_sentiment_tokenizer.pickle', 'rb') as handle:
         loaded_tokenizer = pickle.load(handle)

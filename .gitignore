@@ -9,3 +9,5 @@ data/
 data/*
 
 *.DS_Store
+my_log_dir/
+my_log_dir/*
