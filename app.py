@@ -12,7 +12,7 @@ def predict_rating(text, model_, tokenizer_):
     return float(prediction[0, 0])
 
 
-def load_model():
+def load_my_model():
     loaded_model = load_model("datafiniti_hotel_reviews_sentiment.h5")
     
     with open('datafiniti_hotel_reviews_sentiment_tokenizer.pickle', 'rb') as handle:
@@ -21,7 +21,7 @@ def load_model():
     return loaded_model, loaded_tokenizer
         
 
-model, tokenizer = load_model()
+model, tokenizer = load_my_model()
 
 
 @app.route('/evaluate', methods=["GET"])
